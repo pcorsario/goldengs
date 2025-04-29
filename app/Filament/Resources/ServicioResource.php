@@ -17,7 +17,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextArea;
 use Filament\Tables\Columns\Summarizers\Sum;
-
+use Filament\Tables\Actions\Action;
 class ServicioResource extends Resource
 {
     protected static ?string $model = Servicio::class;
@@ -28,17 +28,16 @@ class ServicioResource extends Resource
     {
         return $form
             ->schema([
-                 Forms\Components\FileUpload::make('imagen')
-                ->image()
-                ->required()
-                ->disk('public')       // Asegúrate de que el disco esté configurado en Laravel
-                ->directory('servicios') // Carpeta dentro del disco (ej: storage/app/public/servicios)
-                ->visibility('public') // Opcional: para acceso público si usas enlaces simbólicos
-                ->maxSize(2048) // Tamaño máximo en KB (ej: 2MB)
-                ->label('Comprobante de Pago')
-                ->directory('servicios')
-                ->columnSpan('full')
-                ->acceptedFileTypes(['image/jpeg', 'image/png']), // Tipos de archivo aceptados
+Forms\Components\FileUpload::make('imagen')
+    ->image()
+    ->required()
+    ->disk('public')
+    ->visibility('public')
+    ->directory('servicios') // <- aquí corregido
+    ->maxSize(2048)
+    ->label('Comprobante de Pago')
+    ->columnSpan('full')
+    ->acceptedFileTypes(['image/jpeg', 'image/png']),
            
                 Forms\Components\Select::make('estudiante_id')
                 ->relationship('estudiante', 'nombres')
@@ -95,8 +94,24 @@ class ServicioResource extends Resource
                         ->label('Total')
                 
                 ]),
-    ImageColumn::make('imagen')
-            ])
+   Tables\Columns\ImageColumn::make('imagen')
+                ->disk('public')
+                ->visibility('public')
+                ->height(60)
+                ->label('Imagen')
+                ->extraAttributes([
+                    'class' => 'cursor-pointer', // Cambia el cursor a "clickable"
+                ])
+                ->action(
+                    Action::make('ver_imagen')
+                        ->modalHeading('Vista previa de la imagen')
+                        ->modalContent(fn (Servicio $record) => view('components.ver-imagen-modal', [
+                            'imagen' => asset('storage/' . $record->imagen),
+                        ]))
+                        ->modalSubmitAction(false) // No botón "Guardar"
+                        ->modalCancelActionLabel('Cerrar') // Solo botón "Cerrar"
+                ),
+        ])
             ->filters([
                 //
             ])

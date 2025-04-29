@@ -25,6 +25,10 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+//	    ->brandLogo(asset('storage/�LogoGB-sf.png')) // Aquí añades tu logo
+->brandLogo(url('/storage/LogoGB-sf.png'))  
+          ->brandLogoHeight('2.5rem')
+	    ->favicon(asset('storage/LogoGB-sf.png'))
             ->path('admin')
             ->login()
             ->colors([
