@@ -117,7 +117,8 @@ Forms\Components\FileUpload::make('imagen')
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->label('Editar'),
+                Tables\Actions\DeleteAction::make()->label('Eliminar'),
                 Action::make('pdf')
             ->label('PDF')
             ->icon('heroicon-o-document-arrow-down')
