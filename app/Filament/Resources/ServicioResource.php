@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextArea;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Actions\Action;
+use Barryvdh\DomPDF\Facade\Pdf;
 class ServicioResource extends Resource
 {
     protected static ?string $model = Servicio::class;
@@ -113,10 +114,15 @@ Forms\Components\FileUpload::make('imagen')
                 ),
         ])
             ->filters([
-                //
+                //c
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('pdf')
+            ->label('PDF')
+            ->icon('heroicon-o-document-arrow-down')
+            ->url(fn ($record) => route('servicios.pdf', $record))
+            ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -140,4 +146,5 @@ Forms\Components\FileUpload::make('imagen')
             'edit' => Pages\EditServicio::route('/{record}/edit'),
         ];
     }
+   
 }
