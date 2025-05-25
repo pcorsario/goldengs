@@ -114,7 +114,7 @@ Forms\Components\FileUpload::make('imagen')
                 ),
         ])
             ->filters([
-                //c
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
